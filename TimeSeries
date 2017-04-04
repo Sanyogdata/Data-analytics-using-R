@@ -1,0 +1,35 @@
+#This is time series analysis for sales data. We used decomposition method here.
+
+#We pull up sales data using read.csv and assign tsdata to Ts.csv
+tsdata <- read.csv("Ts.csv")
+
+Now we are applying time series function that is available in base r package. 
+#Ts - Time series function
+# Start = 2008 1st quater
+#end - 2011 4th quater
+#Frequency - no of quaters in an year
+# tsdata$Sales Selecting sales from tsdata
+
+myts <- ts(tsdata$Sales,start = c(2008,1),end = c(2011,4), frequency = 4)
+# We plot myts to see seasonality type
+plot(myts)
+# By looking graph we know that seasonality is multiplicative in this case
+
+# Now we use decompose function to calculate seasonality index for the data and plot the graph
+
+plot(decompose(myts, type = c("multiplicative")))\
+
+# there is another function stl() to calculate seasonality index
+
+fit <- stl(myts,s.window = "period")
+
+# We require forecast package to predict future values
+libary(forecast)
+fit <- ets(myts) 
+plot(fit)
+# Accuracy function to calculate MAPE(Mean absolute percentage error)
+accuracy(fit$fitted,myts)
+#Forecast function to prediict future values . 4 is the no of quaters for which we want new predicted values
+forecast(fit,4)
+plot(forecast(fit,4))
+summary(fit)
