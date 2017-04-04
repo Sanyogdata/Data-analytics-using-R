@@ -3,7 +3,7 @@
 #We pull up sales data using read.csv and assign tsdata to Ts.csv
 tsdata <- read.csv("Ts.csv")
 
-Now we are applying time series function that is available in base r package. 
+#Now we are applying time series function that is available in base r package. 
 #Ts - Time series function
 # Start = 2008 1st quater
 #end - 2011 4th quater
