@@ -17,7 +17,7 @@ plot(myts)
 
 # Now we use decompose function to calculate seasonality index for the data and plot the graph
 
-plot(decompose(myts, type = c("multiplicative")))\
+plot(decompose(myts, type = c("multiplicative")))
 
 # there is another function stl() to calculate seasonality index
 
