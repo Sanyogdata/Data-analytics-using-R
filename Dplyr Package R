@@ -1,0 +1,76 @@
+install.packages("dplyr")
+require("dplyr")
+msleep <- read.csv("msleep1.csv")
+sleepdata <- select(msleep, name , sleep_total) #Using select function create new dataframe from the existing dataframe 
+class(sleepdata)
+head(sleepdata)
+head(select(msleep,-name)) # Selecting all columnns expect name
+head(select(msleep,name:order)) # Selecting columns from name to order
+head(select(msleep,starts_with("sl"))) # Selecting columns who are starting with "sl" using startswith function
+ends_with()    # Select columns that end with a character string
+contains()    # Select columns that contain a character string
+matches()    #Select columns that match a regular expression
+one_of()    #Select columns names that are from a group of names
+filter(msleep, sleep_total >= 16) # Filter those animals who sleep more than 16 hours
+filter(msleep, sleep_total >= 16 , bodywt >= 1 ) # Filter those animals sleep>=16 and bodywt >=1
+#Filter columns whose has primates and perissodactyla disorder
+filter(msleep, order %in% c("Perissodactyla", "Primates"))
+#You can use the boolean operators (e.g. >, <, >=, <=, !=, %in%) to create the logical tests.
+#Before we go any futher, let's introduce the pipe operator: %>%. 
+#dplyr imports this operator from another package (magrittr). This operator 
+#allows you to pipe the output from one function to the input of another function. Instead of nesting functions (reading from the inside to the outside), the idea of of piping is to read the functions from left to right.
+
+msleep %>% 
+  select(name, sleep_total) %>%  
+  head               # Filtering using pipe operator
+
+msleep %>% arrange(order) %>% head
+
+
+
+msleep %>%
+  select(name,order,sleep_total) %>% #Selecting name , order and sleep total
+  arrange(order,sleep_total)%>%     # arrange by order & sleep_total
+ filter(sleep_total >= 16)
+         
+msleep %>%
+  select(name,order,sleep_total) %>%
+  arrange(order,desc(sleep_total)) %>%
+  filter(sleep_total >= 16)
+
+#The mutate() function will add new columns to the data frame. 
+#Create a new column called
+#rem_proportion which is the ratio of rem sleep to total amount of sleep.
+  
+
+msleep %>%
+  mutate(rem_prop = sleep_rem / sleep_total) %>%  # mutuate created new column
+  head
+
+msleep %>%
+  mutate(rem_prop = sleep_rem / sleep_total ,
+         bodywt_g = bodywt * 1000 ) %>%
+            head
+
+
+  
+msleep %>%
+  summarise(avg_sleep = mean(sleep_total))
+
+
+msleep %>%
+  summarise(avg_sleep = mean(sleep_total),
+            min_sleep = min(sleep_total),
+            max_Sleep = max(sleep_total),
+            total = n())
+
+# group_by() spilt apply combine
+
+msleep %>%
+  group_by(order) %>%
+  summarise(avg_sleep = mean(sleep_total),
+            min_sleep = min(sleep_total),
+            max_sleep = max(sleep_total),
+            total = n())
+
+
