@@ -1,0 +1,61 @@
+# Use CAR_SALES fILE Already Uploaded
+
+
+install.packages("C50")
+require(C50)
+data(churn)
+View(churnTrain)
+
+install.packages("rpart")
+require(rpart)
+
+
+#Rpart - recursive partitioning and regression trees
+
+fit<-rpart(churn ~ ., data = churnTrain)
+?rpart()
+summary(fit)
+plot(fit)
+
+library(rattle)					# Fancy tree plot
+library(rpart.plot)			# Enhanced tree plots
+library(RColorBrewer)		# Color selection for fancy tree plot
+
+table(churnTrain$churn)
+
+fancyRpartPlot(fit,cex=.7 )
+?fancyRpartPlot()
+
+require(C50)
+ruleModel <- C5.0(churn ~ ., data = churnTrain, rules = FALSE)
+ruleModel
+summary(ruleModel)
+
+
+# Regression Tree Example
+library(rpart)
+
+mydata <- read.csv("C:/Users/ChandraMouli/Desktop/Kotak/Decision Trees/Banking Examples/car_sales.csv")
+str(mydata)
+View(mydata)
+
+# grow tree 
+fit <- rpart(Sales_in_thousands ~ X__year_resale_value + Price_in_thousands+ Engine_size+Horsepower+Wheelbase+Width+
+               Length+Curb_weight+Fuel_capacity+Fuel_efficiency, 
+             method="anova",control = rpart.control(minsplit = 25), data=mydata)
+?rpart.control()
+
+printcp(fit) # display the results 
+summary(fit) # detailed summary of splits
+
+# tree plots 
+fancyRpartPlot(fit,cex=.8)  			# A fancy plot from rattle
+
+# create attractive postcript plot of tree 
+post(fit, file = "c:/tree2.ps", 
+     title = "Regression Tree for sales in thousand ")
+
+# prune the tree 
+pfit<- prune(fit, cp=0.019483) # from cptable 
+
+fancyRpartPlot(pfit,cex=.6)    		# A fancy plot from rattle
