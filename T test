@@ -1,0 +1,40 @@
+
+# Use cust_seg file already uploaded
+
+cust_seg <- read.csv("cust_Seg.csv")
+View(cust_seg)
+names(cust_seg)
+t.test(cust_seg$Post_usage_1month, mu = 50)
+t.test(cust_seg$Post_usage_1month,cust_seg$pre_usage ,  paired = TRUE)
+#Dependent Group Test - Compare means for the same sample at two different time periods
+t.test(cust_seg$Latest_mon_usage ~cust_seg$sex , data = cust_seg, var.equal = TRUE)4
+
+#ANNOVA F ,
+?t.test
+#Question: Comparing means of card usage of different segment customers
+
+
+m <- lm(Latest_mon_usage ~segment , data = cust_seg )
+ANNOVA_Seg <- aov(Latest_mon_usage ~segment, data = cust_seg)
+summary(ANNOVA_Seg)
+
+# Show the means
+model.tables(ANNOVA_Seg,"means")
+
+summary(m)
+
+# Chi-Square Statistics - finding the relationship between categorical variabels(Correlation between categorical variables)
+# Question: FInding the relationship between region and Segment
+
+tab <- xtabs(~region + segment , data = cust_seg)
+chisq.test(tab)
+
+
+cor(cust_seg$Latest_mon_usage,cust_seg$pre_usage)
+
+#mu - Number indicating true value of the mean(or difference in means if you are performing a two sample test)
+
+
+
+
+
