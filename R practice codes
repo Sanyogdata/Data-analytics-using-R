@@ -1,0 +1,1166 @@
+print("Hello, World!")
+
+
+import(file = "",
+       dbms = "",
+       out="",
+       replace = T,
+       getnames=T,
+       sheet = "")
+
+# 0. help() or documentation
+# 1. Packages - installing them, loading deleting etc
+# 2. simple R functions
+
+
+X = 10;
+x = "R Class";
+
+#y1=20 y2 = 30
+y1=20; y2 = 30
+
+# text1
+
+#-----------------------------------------------
+# Line 1
+# Line 2
+#-----------------------------------------------
+
+
+#*****************************************************
+# Level 0 - Documentation
+#-----------------------------------------------------
+
+# Help tab - documentation - for all the functions from the packages
+# that are loaded in the system right now!
+
+help("sum")
+
+?"sum"
+
+??"add" # simple wild card search
+
+#-----------------------------------------------------
+
+#*****************************************************
+# Level 1 - Packages
+#-----------------------------------------------------
+
+
+# Functions : set of codes - perform some task
+
+# Package - combo/set of functions that perform inter-related tasks
+# ggplot2 - graphs
+# dplyr - data manipulation
+# glm
+
+
+# Base R - packages defined by R Foundation
+# Contrib - packages defined by General Public
+
+# github - unsafe - not tested and verified
+
+sessionInfo()
+
+# install - gettin g a package from the Internet to your system 
+# also, it would install dependencies
+install.packages("dplyr")
+# use this if the exact spelling of the package is known to you
+
+install.packages("randompackage") # A warning message
+
+
+# Loading a package 
+v = library("dplyr")
+print(v) # list of presently loaded/attached packages, 
+# incl. attached base packages
+
+v1 = require("sqldf")
+print(v1) #Gives me a logical value
+# TRUE - when package is successfully loaded
+# FALSE if not
+
+v3 = library("somerandompackage")
+v4 = require("somerandompackage")
+
+
+library() # It will give me a list of all the installed packages
+
+
+
+
+
+
+detach("package:sqldf")
+
+
+remove.packages("")
+
+
+av = available.packages()
+# crantastic.org
+# r-bloggers.com
+#-----------------------------------------------------
+
+
+
+
+#*****************************************************
+# Level 3 - Getting Started with the codes!
+#-----------------------------------------------------
+
+# Introduction to objects
+x = 10
+v1 = c(1,2,3,4,5,6) # vector of elements
+m1 = matrix(1:12,nrow = 4,ncol = 3)
+data = read.table(file = "HRAL/empdata.csv",header = T,sep = ",",stringsAsFactors = F)
+my_list = list(x,v1,m1,data)
+#-------------------------------------------------
+
+#****************************
+# Operators in R
+#----------------------------
+4+4
+16/2
+?sum
+
+# Assignment Operator
+x = 10
+y <- 100 # '<-' is the actual assignment operator in R !
+120 -> z
+
+# Arithematic Operators
+# +
+# -
+# *
+
+# /
+# %/% - integer division
+
+5/2
+10/3
+
+5 %/% 2 # gives the non decimal part of the quotient
+
+
+# %% modulous
+5 %% 2 # gives me the remainder
+
+# Relational Operators
+
+# >
+# <
+# >=
+# <=
+# ==
+# !=
+
+5 > 2
+5 == 2
+
+
+# Logical Operators
+
+#& # AND op
+#| # OR Operator
+# ! - NOT
+
+# Package ref Operator ::
+
+sqldf::read.csv.sql()
+# packagename::functionName()
+
+
+# Data Types
+
+#-----------------------------------------------------
+
+
+
+#*****************************************************
+# Level 4 - Data Types
+#-----------------------------------------------------
+
+# Object 
+# 1. What kind of information that is there inside it
+# 2. How is that information stored?
+
+
+# 1. What kind of information that is there inside it - 
+# Defined by the Data Type
+
+# Number
+# Text
+# Date
+# Boolean/Logical
+
+# Numbers
+# numeric data type
+
+# integer - is number returned by a function iff 
+
+# 1. It has no decimal part
+# 2 . in a range of -2147483648 to 2147483647
+
+# Special numbers
+NA # denotes a missing value of any datatype
+NaN # not a number
+Inf # positive infinity
+-Inf # negative infinity
+
+# Textual Data
+
+# Characters
+
+name <- "AnalytixLabs Gurgaon, India"
+name2 <- 'Jaguar'
+
+
+# Logical
+l1 <- 5>2
+
+# Dates
+
+today <- Sys.Date()
+time <- Sys.time()
+
+print(today)
+# To know the data type, there are 3 functions in R,
+# class() -> to know the type/structure of the data
+
+class(x)
+class(name2)
+class(today)
+class(time)
+
+
+
+# To convert one data type to other
+# as.##### -> convert the datatype of that object.
+
+x
+xChar <- as.character(x)
+class(xChar)
+
+
+x
+as.logical(x)
+
+
+
+
+
+
+as.numeric(xChar)
+name2
+as.numeric(name2)
+
+#dates
+today
+as.numeric(today)
+
+# SAS -  a date is number of days from 1st Jan 1960
+# R -  a date is number of days from 1st Jan 1970
+
+
+# logical
+l1
+as.numeric(l1)
+as.character(l1)
+
+x <- 100
+as.logical(x)
+
+y <- 0
+as.logical(y)
+
+z <- -10
+as.logical(z)
+
+s1 <- "name"
+as.logical(s1)
+
+s2 <- ""
+as.logical(s2)
+
+d1 <- as.Date("2016-11-27")
+as.logical(d1)
+
+
+#****************************************
+# Dates Conversion
+#----------------------------------------
+# Problem - when importing data - dates get imported as characters
+
+
+date1 <- "26NOV2016"
+date2 <- "2016-11-26"
+date3 <- "26/11/2016"
+date4 <- "11/26/16"
+date5 <- "26 November, 2016"
+
+
+date2_d <- as.Date(date2) # default date format!!!!
+
+?strptime
+
+# for all other cases, we specify the format
+# conver R interpreter :
+# 1. The days part %_
+# 2. The months part %-
+# 3. The year part %-
+# 4. Presence of special characters
+
+date1_d <- as.Date(date1,format = "%d%b%Y") 
+# date1 is present as this particular format 
+# specified by the format = argumet
+
+# Days part - %d
+
+# Months Part -
+
+# 1-12 -> %m
+# JAN - DEC -> %b
+# JANUARY - DECEMBER -> %B
+
+# Years
+# yyyy 2016 - %Y
+# yy - 16 - %y
+
+date3_d <- as.Date(date3,format = "%d/%m/%Y")
+
+date4
+date4_d <- as.Date(date4,format = "%m/%d/%y")
+
+date5
+date5_d <- as.Date(date5,format = "%d %B, %Y")
+
+date6 <- "Saturday, November 26, 2016"
+date6_d <- as.Date(date6,format = "%A, %B %d, %Y")
+# Numbers to date
+
+date7 <- 20161126 # default gets imported as a numeric
+date7_d <- as.Date(as.character(date7), format="%Y%m%d")
+
+date8 <- 18000
+date8_d <- as.Date(date8, origin = "1970-01-01")
+
+as.Date(17131, origin = "1970-01-01")
+
+
+# Date to character or a format
+# %Y-%m-%d
+
+# format()
+
+today <- Sys.Date()
+class(today)
+
+todayT <- Sys.time()
+
+today1 <- date()
+class(today1)
+
+formatedDate1 <- format(today,format = "%m %d, %Y") 
+formatedDate2 <- format(todayT,format = "%a %b %d %H:%M:%S %Y" )
+
+as.Date(inputChr, format = "%m %d, %Y") # This is conveying R the format of the input
+# Then, converting it to a standard date format
+
+format(today,format = "%m %d, %Y") # First arg is already in Date format
+# Aim is to convert date to a presentable string.
+# format = "" -> to convert the date to the given/user specified format
+
+
+class(todayT) #Portable OS Interface
+
+date <- "Nov 27, 2016"
+date_d <- as.Date(date,format = "%b %d, %Y")
+date_d_p <- as.POSIXlt(date_d) # convert to posix
+
+unclass(date_d_p) # Gives me the component names and corresponding values
+
+# To get a day
+date_d_p$mday
+
+# To get month - stores month as 0 - 11
+date_d_p$mon + 1
+
+# To get year - stored as No of years from 1900
+date_d_p$year + 1900
+
+
+require(lubridate)
+
+
+
+#-----------------------------------------------------
+
+
+#*****************************************************
+# Level 5 - Data Structures
+#-----------------------------------------------------
+# Object 
+# 1. What kind of information that is there inside it - DONE!!
+# 2. How is that information stored?
+
+# Data Structure 
+
+# Homogenous - object with multiple information in it - but of single data type
+
+
+
+
+
+# Hetrogenous - multiple datatypes
+
+
+#************************************
+# Vectors
+#------------------------------------
+x = 10
+
+v1 <- c(10,5,7,12,15,6,8,89)
+v1
+v2 <- c(10.5,5.1,12.7,8,13,45.3,18,0.5)
+.
+# Dynamically typed
+sv1 <- c("Daenerys","Snow","Arya","Cersei","Tyrion","Shae","Sansa")
+
+class(v1)
+class(sv1)
+
+
+
+test_v <- c(10.5,5.1,12.7,8,13,45.3,18,0.5,11.0,"S")
+test_v1 <- c(10.5,5.1,12.7,8,13,45.3,18,0.5,"10",11.0)
+
+
+# Sequencing 
+
+v3 <- 1:10
+class(v3)
+5:1
+
+
+# 1,3,5,7,9
+
+
+# seq()
+
+seq(from = 1,to = 10) # 1:10
+seq(from = 1,to = 10,by = 2)
+
+seq(0.5,10.5,by = 2.25)
+
+
+v6 <- seq(from = 100,to = 10, by = -10) # in reverse seq, please use a - sign on "by" arg
+
+
+
+
+
+
+
+# Sampling
+
+# get 10 random numbers from 1 to 100
+sv1 <- sample(x = 1:1000,
+              size = 10,
+              replace = TRUE # Do you want repeats
+)
+sample(x = 1:1000,
+       size = 10,
+       replace = TRUE # Do you want repeats - if no, then relpace = TRUE
+)
+.
+
+my_vector <- c(12,44,67,10,4,7,8,9,10,71,44,54,13,19,20,10)
+
+# [] - used for indexing and conditions
+# 1. [] -> takes position as input
+# 2. [] -> takes boolean/logical values as input
+  
+# Indexing
+my_vector[2] # The second element 
+my_vector[-2] # All but the second element - ve sign excludes that position
+
+
+
+
+my_vector[1:3] #Elements 1 through 3
+my_vector[-(1:7)] # All elements except 1 to 7
+
+
+my_vector[c(2, 5)] # Elements 2 and 5
+
+
+# Conditions
+my_vector[my_vector > 10] # Elements where the *value* is more than 10
+
+which(my_vector > 10) # Same as above
+
+my_vector[my_vector >= 1 & my_vector <= 10] # Well,
+my_vector[my_vector %in% 1:10] # %in% denotes a range. So, elements from my vector that are >1 and <3
+match(my_vector, 1:10)
+
+# StudentMarks * within * 90:100 -> %in%
+
+
+# Sorting values
+
+# sort() -> arrange and return the values
+sort(my_vector)
+sort(my_vector,decreasing = T)
+
+#rank() and order() would give me the positions!
+
+rank(my_vector) 
+# Gives the position of an element in the sorted array
+
+
+
+order(my_vector) 
+# After sorting, what is the position of that element from the sorted array in the
+# original array
+
+my_vector[order(my_vector)]
+
+
+my_vector[c(10,11,12)]
+my_vector[c(5 , 6 , 7,  8,  4,  9, 16,  1, 13, 14, 15,  2, 11, 12,  3, 10)]
+
+my_vector
+my_vector > 10
+
+my_vector[my_vector > 10]
+
+my_vector[my_vector >= 10 & my_vector <= 15]
+
+
+match(my_vector, 1:10)
+?match
+
+
+# appending
+my_vector
+# add 31 in the end
+my_vector <- c(my_vector,31)
+
+# replacing elements
+
+# replacing one value by other - 
+# replace 44 by 42
+my_vector[my_vector == 44]
+
+my_vector[my_vector == 44] <- 42
+my_vector[my_vector < 10]
+
+
+
+
+
+my_vector[c(rank(my_vector)) == 2]
+my_vector[order(my_vector)]
+
+
+# Maths operations
+sqrt(my_vector)        # NaN (not a number) produced as a resulting of squarting negative values
+log(my_vector)         # etc.
+sum(my_vector)         # sum
+prod(my_vector)        # product
+cumsum(my_vector)      # cumulates (sums up) all the values
+cumprod(my_vector)     # multiplies up all the values
+diff(my_vector)        # lagged differences of all the values
+
+# Useful functions
+length(my_vector)     # vector's length
+unique(my_vector)     # distinct values of the vector
+head(my_vector, 3)    # displays first 3 elements of my_vector
+tail(my_vector, 2)    # displays last 2 elements of my_vector
+sort(my_vector)       # sorts my_vector
+order(my_vector)      # returns the order of my_vector
+rev(my_vector)        # reverts the order of elements in my_vector
+which.max(my_vector)  # return position of the max value
+which.min(my_vector)  # return position of the min value
+rank(my_vector)       # rank elements
+#-----------------------------------------
+
+
+#*****************************************
+# Matrices
+#-----------------------------------------
+my_matrix <- matrix(data = 1:12,nrow = 4,ncol = 3)
+# 1. A vector
+# 2. No of rows
+# 3. No of columns
+
+my_matrix2 <- matrix(data = 1:12,nrow = 5,ncol = 5)
+
+my_matrix3 <- matrix(data = 1:12,nrow = 4,ncol = 3,byrow = T)
+# 1. A vector
+# 2. No of rows
+# 3. No of columns
+# 4. by row = T or F
+
+as.matrix() # Converts a tabular data to a matrix DS
+
+# Indexing 
+# [r,c]
+# [r,]
+# [,c]
+my_matrix[2,2]
+
+my_matrix[2,] # second row
+my_matrix[,3] # third column is printed
+
+my_matrix[,4] # error, coz the max column size is 3
+
+my_matrix3[4]
+my_matrix3[12]
+my_matrix3[13]
+
+# Conditions
+
+# my_matrix[r,c]
+# Row conditions - are to be applied on rows -> before the ,
+# Column conditions - are to be applied on Columns part -> after the ,
+
+my_matrix3[my_matrix3 > 10]
+
+my_matrix
+
+# Functions
+
+t(my_matrix)
+eigen(my_matrix3)
+det(my_matrix3)
+
+sort(my_matrix3)
+matrix(sort(my_matrix3))
+
+dim(my_matrix)                # Dimesnion of matrix
+det(my_matrix)                # Determinant
+eigen(my_matrix)              # Eigenvalues/Eigenvectors
+(t(my_matrix) %*% my_matrix)  # Transpose and multiply
+
+rowSums(my_matrix)            # Sum of rows
+colSums(my_matrix)            # Sum of colums
+rowMeans(my_matrix)           # Avgs of rows
+colMeans(my_matrix)           # Avgs of colums
+
+#-----------------------------------------
+
+#*****************************************
+# Lists
+#-----------------------------------------
+# List - A DS which can hold other DS in it!
+
+
+my_list1 <- list(x,today,v1,my_vector,my_matrix) # position is id by an index number
+
+my_list2 <- list(title = "My List",
+                 variable = x,
+                 date=today,
+                 vector1 = v1,
+                 vector2 = my_vector,
+                 Matrix = my_matrix)
+# positions have a name!
+
+
+ex1 = my_list1[[5]] # The output is the exact content that is present in the specified position
+
+ex2 <- my_list1[5] # The output(s) get created as a part of a new list
+# If you want multiple elements from a list, as a new list, use the [] notation
+# If you need that exact DS and only one element at a time, use [[]] notation
+
+my_list1[[c(2,3)]]
+my_list1[c(2,3)]
+my_list1[[3]]
+.
+
+# In a named list, the [[]] can be replaced by the $ op and the position name
+# I can still use position numbers for a named list
+my_list2[[6]]
+my_list2$Matrix
+my_list2[["Matrix"]]
+.
+
+o1 <- my_list2$Matrix
+o1[2,3]
+
+my_list2[["Matrix"]][2,3]
+
+my_list2$Matrix[2,3]
+.
+
+
+
+
+
+
+#-----------------------------------------------------
+
+
+#*****************************************************
+# Level 6 - Programming Constructs
+#-----------------------------------------------------
+# Conditionals
+# Iterations
+# Apply functions
+
+
+# Conditional Statement
+
+#if .. then .. else
+
+# if(<condition>){
+#   #Statement 1
+# }
+
+if(2 < 5){
+  print("Yes")
+}else {
+  print("Nopes")
+}
+
+if(2 > 5){
+  print("Yes")
+}else {
+  print("Nopes")
+}
+
+# Nested if
+if(2 > 5){
+  print("Yes 2 is lt 5")
+}else if(2 > 1){
+  print("Yes 2 is gt 1")
+}else {
+  print("Nopes")
+}
+
+# ifelse(<Condition>,<TRUE>,<FALSE>)
+
+Result <- ifelse(5 > 10,1,0)
+
+# Iterations
+
+# for(i = 1 ; i <= 10 ; i++)
+
+1:10
+for(i in 1:10){
+  print(i)
+}
+
+# for(i = 1 ; i <= 10 ; i+=2)
+
+for(i in seq(from = 1,to = 10,by = 2)){
+  print(i)
+}
+
+# nrow() # No of rows
+for(i in 1:nrow(DataFrame)){
+  
+}
+
+# Apply Functions
+my_matrix <- matrix(1:12,4,3)
+
+# Takes a function - predefined or user defined and applied to rows and columns
+
+# apply(<data>,<dimension>,FUN = <function>)
+sum(1:10)
+
+# <dimension> or MARGIN = 
+# 1 - Rows,
+# 2 - Columns,
+# c(1,2) - Both Rows and Columns
+
+# Sum of all the elements present in the columns
+apply(my_matrix,MARGIN = 2,FUN = sum)
+
+# Sum of all the elements present in the rows of a matrix
+RowSum <- apply(my_matrix,MARGIN = 1,FUN = sum)
+RowSum[3]
+
+v1 <- 1:10
+sum(v1)
+
+
+s1 <- c(144,25,9,16,625,121,1600,2500)
+sqrt(s1)
+
+
+
+# FuncName <- function(arg1, arg2, arg3 ...){
+#   Statement 1;
+#   Statement 2;
+#   
+#   
+#   Result = list(Output1 = val1, Output2 = val2, Output3 = val3 ...)
+#   or
+#   Result = c(Output1 = val1, Output2 = val2, Output3 = val3 ...)
+#   return(Result)
+# }
+
+curt <- function(x){
+  res = x ^ (1/3)
+  return(res)
+}
+
+c1 = c(27,64,81,343,1331,729,8)
+curt(c1)
+
+square <- function(x){
+  res = x ^ 2
+  return(res)
+}
+
+apply(my_matrix,MARGIN = c(1,2),FUN = square)
+
+apply # inputs - matrix or a DF - output - vectors, matrix
+
+#lapply # input - list (or a matrix, DF) output - list and no dimensionality argument
+lapply(my_matrix, FUN = square )
+
+
+#sapply # input - list (or a matrix, DF, vector) output - vector and no dimensionality argument
+# sapply tries to give a vector in all possible cases. 
+# It can also give list as an op depending on the inputs
+sapply(my_matrix, FUN = square)
+#-----------------------------------------------------
+
+
+#*****************************************************
+# Level 7 - Data Frames - Importing Data
+#-----------------------------------------------------
+
+# Text files
+
+# PROC IMPORT DATAFILE = "C:/MY DOCUMENTS/DATASETS/File.csv" OUT = File DBMS = CSV REPLACE;
+# GETNAMES = YES
+# RUN;
+
+MyFirstData <- read.table(file = "DataSets/stores.csv",
+                          header = TRUE,sep = ",",
+                          stringsAsFactors = FALSE)
+
+read.csv(file = "DataSets/stores.csv",
+         stringsAsFactors = FALSE)
+
+# Excel
+# xlsx or XLConnect and Java must be installed in the system
+
+# Install JRE and set environment variable
+
+require(xlsx)
+ExcelData <- read.xlsx(file = "DataSets/Data_Xlsx.xls",
+                       sheetIndex = 1,
+                       stringsAsFactors = FALSE)
+
+require(readxl)
+MyXLSFile2 <- read_excel("~/DataSets/Car_data_oth.xlsx")
+
+require(foreign)
+
+require(sas7bdat)
+SAStoR <- read.sas7bdat("DataSets/hsb2.sas7bdat")
+
+# To create a DF from equal sized vectors
+v1 = 1:5
+v2 = c(23,44,56,78,32)
+v3 = c("A","B","C","D","E")
+
+DF_Vectors <- data.frame(Column1 = v1, Column2 = v2, Column3 = v3)
+
+
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-----------------------------------------------------
+
+#*****************************************************
+# Level 8 - Data Frames - 
+# Acting On Columns, Subsetting, Type conversions
+#-----------------------------------------------------
+stores <- read.table(file = "DataSets/stores.csv",header = TRUE,sep = ",",stringsAsFactors = F)
+
+library(dplyr)
+
+# Summary Stats on the dataset
+str(stores) # structure 
+summary(stores)
+names(stores)
+
+# Extract a column - $ operator is used
+Col1 <- stores$Location # $ extracts columns as a vector
+
+
+
+Location <- stores["Location"]
+Location2 <- stores[,"Location"] # equivalent to stores$Location
+
+# Change a column's datatype - OnlinePresence Numeric to character
+OP <- stores$OnlinePresence
+OP <- as.character(OP)
+stores$OnlinePresence <- OP
+
+stores$Tenure <- as.character(stores$Tenure)
+
+
+# renaming a column
+
+ColumnNames <- names(stores)
+# Change Location to City
+
+ColumnNames[ColumnNames == "Location"] <- "City"
+
+names(stores) <- ColumnNames
+
+# Two column names - follow the correct order while replacing 
+
+fix(stores)
+
+# dplyr
+stores <- dplyr::rename(.data = stores, City = Location) # NewName = OldName
+
+# Subsetting
+
+stores[,"Location"]
+sub1 <- stores[,c("StoreName","Location","OnlinePresence")]
+
+sub2 <- stores[,c(1,4,6,7,8,9)]
+
+# to extract selected number of rows
+
+# Extract randomly 10 rows and three columns
+sub3 <- stores[1:10,c(1,4,6,7,8,9)]
+
+# rearranging columns
+ncol(stores)
+
+Rearranged <- stores[,c(15,7,8,3,5,10,11,12,1,2,9,4,6,14,13)]
+# 15 col to 6th position
+
+Rearranged2 <- stores[,c(1:5,15,6:14)]
+
+
+# Filtering
+sub3 <- stores[1:10,c(1,4,6,7,8,9)]
+
+# Conditions are applied on the data elements which are row wise
+
+# Select StoreName and Location from Stores where OperatingCost > 15
+sub4 <- stores[stores$OperatingCost > 15,c("StoreName","Location","OperatingCost")] # [r,c]
+
+# Subsetting and Filtering using functions
+
+# Select StoreName and Location from Stores where OperatingCost > 15
+sub4 <- stores[stores$OperatingCost > 15,c("StoreName","Location","OperatingCost")] # [r,c]
+
+sub4_func1 <- subset(stores, 
+                     OperatingCost > 15,
+                     select = c("StoreName","Location","OperatingCost"))
+
+# Select OperatingCost > 15 and OperatingCost < 25
+sub5 <- subset(stores, 
+               OperatingCost >= 15 & OperatingCost <= 25,
+               select = c("StoreName","Location","OperatingCost"))
+
+# Adding and Remving a Column
+stores$Location
+
+stores$OwnStore <- as.character(stores$OwnStore)
+
+# GrossSales = Product of TotalSales and Customers
+
+stores$GrossSales <- stores$TotalSales * stores$Total_Customers
+
+# Create a dummy column
+stores$Dummy1 <- 0
+stores$Dummy2 <- ""
+
+# Remove a column
+stores$GrossSales <- NULL # Assign NULL to any Column, it'll be dropped
+
+
+# transform()
+?transform()
+
+stores <- transform(stores, GrossSales = TotalSales * Total_Customers)
+stores$GrossSales <- NULL
+#dplyr
+# mutate and transmute
+stores <- mutate(stores,GrossSales = TotalSales * Total_Customers,
+                 TotalCost = OperatingCost - GrossSales)
+stores2 <- transmute(stores,GrossSales = TotalSales * Total_Customers)
+
+# Sorting
+
+v1 <- c(12,33,44,56,76,88,54,33,21,99,20)
+sort(v1)
+sort(v1,decreasing = T)
+
+order(v1)
+v1[order(v1)]
+
+# Sorting using one variable
+storesSorted <- stores[order(stores$StoreName),]
+
+d_storesSorted <- dplyr::arrange(stores,StoreName)
+
+# Sorting Using two variables
+storesSorted2 <- stores[order(stores$StoreName,stores$Location),]
+
+d_storesSorted2 <- arrange(stores,StoreName,Location)
+
+
+# Reverse Sorting
+storesSorted3 <- stores[order(stores$TotalSales,decreasing = TRUE),]
+storesSorted3 <- stores[order(-stores$TotalSales),] # - sign for decreasing order
+# - sign works only for numerical values
+
+d_storesSorted3 <- arrange(stores,desc(TotalSales)) # desc() for descending order
+
+storesSorted4 <- stores[order(stores$StoreName,decreasing = TRUE),]
+
+# Reverse Sort one Numerical Column and another num column in normal sort
+storesSorted5 <- stores[order(-stores$TotalSales,stores$OperatingCost),]
+
+# Reverse Sort one Numerical Column and another non numerical column in normal sort
+# IMPOSSIBLE!!!
+
+d_storesSorted6 <- arrange(stores,Location,desc(TotalSales))
+
+# duplicates
+View(scores)
+
+v2 <- c(12,13,55,44,12,46,55,54,78,54,99,12,13)
+v2
+# To get all unique values :
+unique(v2) # All unique values
+
+duplicated(v2)
+
+v2[duplicated(v2)] # -> all the repeated values 
+v2[!duplicated(v2)] # ->  All unique values
+
+
+unique(scores) # All repeated rows by checking all the column elements
+# If atleast one element in a column is unique, then the row is not dropped!
+
+scores[duplicated(scores),]
+
+unique(scores$Student)
+
+unique(scores$Test2)
+
+scores[duplicated(scores$Student),]
+scores[duplicated(scores$Test2),]
+# Missing Values
+v1 <- c(12,43,55,67,88,32,NA,NA,98,77,NA)
+
+v1
+#Detect missing values 
+is.na(v1)
+
+# Pick up missing values []
+v1[is.na(v1)]
+
+# Impute them
+v1[is.na(v1)] <- 0
+
+v1[v1!=0]
+
+v1 <- v1[!is.na(v1)]
+
+# To drop the NA
+v1 <- na.omit(v1)
+
+
+# For a DF
+is.na(stores)
+
+stores[is.na(stores)] # detect the NA from ALL the columns of the dataset'
+
+stores[is.na(stores$StoreCode)]
+stores[is.na(stores$StoreName)]
+
+stores[is.na(stores)] <- 0
+
+
+# Binning
+stores$TotalSales
+
+v1 <- summary(stores$TotalSales)
+
+# TotalSales
+# 71.1 to 120.8 -> Low Performance
+# 120.8 - 230.7 -> Average Performance
+# 230.7 - 326 -> Good Performace
+# >326 -> High Performance
+
+stores$StoresCategory[stores$TotalSales >= 71.1 & stores$TotalSales < 120.8] <- "Low Performance"
+
+stores$StoresCategory[stores$TotalSales >= 120.8 & stores$TotalSales < 230.7] <- "Average Performance"
+
+stores$StoresCategory[stores$TotalSales >= 230.7 & stores$TotalSales < 326] <- "Good Performance"
+
+stores$StoresCategory[stores$TotalSales >= 326] <- "High Performance"
+
+#ifelse(condition,T,if(contition2,T,ifelse(Condition3,T,F)))
+stores$StoresCategory2 <- ifelse(stores$TotalSales >= 71.1 & stores$TotalSales < 120.8,"Low Performance",
+                                 ifelse(stores$TotalSales >= 120.8 & stores$TotalSales < 230.7,"Average Performance",
+                                        ifelse(stores$TotalSales >= 230.7 & stores$TotalSales < 326,"Good Performance",
+                                               ifelse(stores$TotalSales >= 326,"High Performance","Not Availabe"))))
+
+
+
+
+# Merging
+
+dd <- read.csv("DataSets/Demographic_Data.csv")
+td <- read.csv("DataSets/Transaction_Summary.csv")
+
+InnerJoin <- merge(x = dd ,y = td,
+                   by.x = "CustName", by.y = "CustomerName")
+
+FullJoin <- merge(x = dd ,y = td,
+                  by.x = "CustName", by.y = "CustomerName",all = TRUE)
+
+RightJoin <- merge(x = dd ,y = td,
+                   by.x = "CustName", by.y = "CustomerName",all.y = TRUE)
+
+LeftJoin <- merge(x = dd ,y = td,
+                  by.x = "CustName", by.y = "CustomerName",all.x = TRUE)
+
+
+#dplyr
+left_join()
+right_join()
+full_join()
+inner_join()
+semi_join()
+anti_join()
+
+
+d_RightJoin = right_join(x = dd,y = td,by = c("CustName" = "CustomerName","Col2" = "Col3"))
+
+
+
+
+#-----------------------------------------------------
