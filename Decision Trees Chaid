@@ -1,0 +1,52 @@
+#install.packages("CHAID", repos = "http://R-Forge.R-project.org", type = "source")
+library("CHAID")
+#The current implementation only accepts nominal or ordinal categorical predictors. When predictors are continuous, 
+#they have to be transformed into ordinal predictors before using the following algorithm.
+
+?chaid
+help("chaid", package = "CHAID")
+example("chaid", package = "CHAID")
+
+library("CHAID")
+
+### fit tree to subsample
+set.seed(290875)
+USvoteS <- USvote[sample(1:nrow(USvote), 1000),]
+names(USvote)
+View(USvoteS)
+
+ctrl <- chaid_control(minsplit = 50, minprob = 0.4)
+chaidUS <- chaid(vote3 ~ ., data = USvoteS, control = ctrl)
+
+print(chaidUS)
+plot(chaidUS)
+
+########################Classification Trees
+fit <- rpart(vote3 ~ ., data = USvoteS, 
+             method="class", control=rpart.control(minsplit=100))
+
+printcp(fit) # display the results 
+summary(fit) # detailed summary of splits
+print(fit)
+
+
+# plot the tree 
+#rpartplot 
+#rattle
+fancyRpartPlot(fit)  			# A fancy plot from rattle
+
+
+#### Re-analyzing with PARTY PACKAGE/ctree function
+
+# Conditional Inference Tree for Kyphosis
+library(party)
+fit <- ctree(vote3 ~ ., data = USvoteS, 
+             control = ctree_control(mincriterion = .01))
+plot(fit, main="Conditional Inference Tree for customer data")
+
+prediction <- predict(fit)
+table(USvoteS$vote3, prediction, type = "node") # can also use type = "node"
+predict1 <- prediction>=0.1
+table(USvoteS$vote3, predict1)
+plot(fit, main="Binary Decision Tree", type="simple")
+
